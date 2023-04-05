@@ -1,6 +1,6 @@
 import React from "react";
 import { Route, Routes } from "react-router-dom";
-
+import Refund from "./pages/Refund.jsx"
 import { Sidebar, Navbar } from "./components";
 import { CampaignDetails, CreateCampaign, Home, Profile } from "./pages";
 import ConnectMetamask from "./components/ConnectMetamask";
@@ -24,6 +24,7 @@ const App = () => {
             <Route path="/" element={<Home />} />
             <Route path='/withdraw' element={<Withdraw />} />
             <Route path="/profile" element={<Profile />} />
+            <Route path='/refund' element={<Refund />} />
             <Route path="/create-campaign" element={<CreateCampaign />} />
             <Route path="/campaign-details/:id" element={<CampaignDetails />} />
           </Routes>

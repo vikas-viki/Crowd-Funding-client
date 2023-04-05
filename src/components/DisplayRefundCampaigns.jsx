@@ -5,8 +5,8 @@ import { loader } from "../assets";
 import { CustomButton } from "./";
 import { useStateContext } from "../Context";
 
-const DisplayWithdrawCampaigns = ({ title, isLoading, campaigns }) => {
-  const { withdrawFunds } = useStateContext();
+const DisplayRefundCampaigns = ({ title, isLoading, campaigns }) => {
+  const { refund } = useStateContext();
   return (
     <div>
       <h1 className="font-epilogue font-semibold text-[18px] text-white text-left">
@@ -85,10 +85,10 @@ const DisplayWithdrawCampaigns = ({ title, isLoading, campaigns }) => {
                 <div className="flex justify-center mb-[10px]">
                   <CustomButton
                     btnType="button"
-                    title={"Withdraw Campaign Funds"}
+                    title={"Withdraw Campaign Donation"}
                     styles={"bg-[#8c6dfd]"}
                     handleClick={() => {
-                      withdrawFunds(campaign.pId);
+                      refund(campaign.pId);
                     }}
                   />
                 </div>
@@ -100,4 +100,4 @@ const DisplayWithdrawCampaigns = ({ title, isLoading, campaigns }) => {
   );
 };
 
-export default DisplayWithdrawCampaigns;
+export default DisplayRefundCampaigns;

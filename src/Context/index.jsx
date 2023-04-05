@@ -460,6 +460,8 @@ export const StateContextProvider = ({ children }) => {
         amountCollected: amountCollected,
         image: campaign.image,
         pId: i,
+        donators: [...campaign.donators],
+        donations: [...campaign.donations.map(e => Number(ethers.formatEther(String(e))))],
       };
     });
     return parsedCampaings;
@@ -526,6 +528,14 @@ export const StateContextProvider = ({ children }) => {
     }
   };
 
+  const getUserDonatedCampaigns = async () =>{
+    const data = await getCampaigns();
+    
+    return data.filter(e => {
+      return e.donators.includes(address);
+    });
+  }
+
   return (
     <StateContext.Provider
       value={{
@@ -543,6 +553,7 @@ export const StateContextProvider = ({ children }) => {
         setAddress,
         withdrawFunds,
         refund,
+        getUserDonatedCampaigns,
       }}
     >
       {children}
