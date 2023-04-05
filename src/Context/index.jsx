@@ -368,6 +368,7 @@ const Caddress = "0xDa106788f889dA588203a54B0B6356A291512255";
 export const StateContextProvider = ({ children }) => {
   const [address, setAddress] = useState("");
   const [contract, setContract] = useState({});
+  const [campaigns, setCampaigns] = useState([]);
 
   const connect = async () => {
     // Check if the browser has MetaMask installed
@@ -390,84 +391,77 @@ export const StateContextProvider = ({ children }) => {
   };
 
   const publishCampaign = async (form) => {
-    try {
-      const data = await contract.createCampaign(
-        address, // owner
-        form.title, // title
-        form.description, // description
-        form.target,
-        new Date(form.deadline).getTime(), // deadline,
-        form.image
-      );
-
-      console.log("contract call success", data);
-    } catch (error) {
-      console.log("contract call failure", error);
+    const userCampaign = await getUserCampaigns();
+    if (userCampaign.length <= 0) {
+      try {
+        await contract.createCampaign(
+          address, // owner
+          form.title, // title
+          form.description, // description
+          form.target,
+          new Date(form.deadline).getTime(), // deadline,
+          form.image
+        );
+      } catch (error) {
+        alert(error.message.split('"')[1]);
+      }
+    } else {
+      alert("Sorry, only one campaign can be created by an user");
+      return;
     }
   };
 
-
-
-
-
-
-
-
-
-
-
-
-// [ todo]
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-  const getCampaigns = async (specific = null) => {
+  const getSpecificCampaign = async (_title) => {
     const campaigns = await contract.getCampaigns();
 
-    const parsedCampaings = campaigns
-      .map((campaign, i) => {
-        const target = campaign.target
-          ? ethers.formatEther(campaign.target)
-          : null;
-        const amountCollected = campaign.AmountCollected
-          ? ethers.formatEther(campaign.AmountCollected)
-          : null;
+    const parsedCampaigns = campaigns.map((campaign, i) => {
+      const target = campaign.target
+        ? ethers.formatEther(campaign.target)
+        : null;
+      const amountCollected = campaign.AmountCollected
+        ? ethers.formatEther(campaign.AmountCollected)
+        : null;
 
-        if (specific && !campaign.title.includes(specific)) {
-          return null;
-        }
+      return {
+        owner: campaign.owner,
+        title: campaign.title.trim(),
+        description: campaign.description,
+        target: target,
+        deadline: Number(campaign.deadline),
+        amountCollected: amountCollected,
+        image: campaign.image,
+        pId: i,
+      };
+    });
+    const lowercaseTitle = _title.toLowerCase();
+    const arr = parsedCampaigns.filter((e) => {
+      return e.title.toLowerCase().includes(lowercaseTitle);
+    });
+    setCampaigns(arr);
+  };
 
-        return {
-          owner: campaign.owner,
-          title: campaign.title,
-          description: campaign.description,
-          target: target,
-          deadline: Number(campaign.deadline),
-          amountCollected: amountCollected,
-          image: campaign.image,
-          pId: i,
-        };
-      })
-      .filter((campaign) =>
-        specific ? campaign.title.includes(specific) : true
-      );
+  const getCampaigns = async () => {
+    const campaigns = await contract.getCampaigns();
 
+    const parsedCampaings = campaigns.map((campaign, i) => {
+      const target = campaign.target
+        ? ethers.formatEther(campaign.target)
+        : null;
+      const amountCollected = campaign.AmountCollected
+        ? ethers.formatEther(campaign.AmountCollected)
+        : null;
+
+      return {
+        owner: campaign.owner,
+        title: campaign.title,
+        description: campaign.description,
+        target: target,
+        deadline: Number(campaign.deadline),
+        amountCollected: amountCollected,
+        image: campaign.image,
+        pId: i,
+      };
+    });
     return parsedCampaings;
   };
 
@@ -492,7 +486,7 @@ export const StateContextProvider = ({ children }) => {
         value: amountWei,
       });
     } catch (error) {
-      alert(error.message);
+      alert(error.message.split('"')[1]);
       return;
     }
 
@@ -512,9 +506,24 @@ export const StateContextProvider = ({ children }) => {
         donation: weiToEth,
       });
     }
-    console.log(parsedDonations);
 
     return parsedDonations;
+  };
+
+  const withdrawFunds = async (_id) => {
+    try {
+      await contract.withdrawFunds(_id);
+    } catch (error) {
+      alert(error.message.split('"')[1]);
+    }
+  };
+
+  const refund = async (_id) => {
+    try {
+      await contract.refund(_id);
+    } catch (error) {
+      alert(error.message.split('"')[1]);
+    }
   };
 
   return (
@@ -528,6 +537,12 @@ export const StateContextProvider = ({ children }) => {
         getUserCampaigns,
         donate,
         getDonations,
+        getSpecificCampaign,
+        campaigns,
+        setCampaigns,
+        setAddress,
+        withdrawFunds,
+        refund,
       }}
     >
       {children}

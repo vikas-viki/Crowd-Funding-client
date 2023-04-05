@@ -5,6 +5,7 @@ import { Sidebar, Navbar } from "./components";
 import { CampaignDetails, CreateCampaign, Home, Profile } from "./pages";
 import ConnectMetamask from "./components/ConnectMetamask";
 import { useStateContext } from "./Context/index";
+import Withdraw from "./pages/Withdraw";
 
 const App = () => {
   const { address } = useStateContext();
@@ -21,6 +22,7 @@ const App = () => {
         ) : (
           <Routes>
             <Route path="/" element={<Home />} />
+            <Route path='/withdraw' element={<Withdraw />} />
             <Route path="/profile" element={<Profile />} />
             <Route path="/create-campaign" element={<CreateCampaign />} />
             <Route path="/campaign-details/:id" element={<CampaignDetails />} />
