@@ -477,14 +477,14 @@ export const StateContextProvider = ({ children }) => {
     return filteredCampaigns;
   };
 
-  const donate = async (pId, amount) => {
-    console.log(pId, amount);
+  const donate = async (pId, amount, agree = true) => {
+    console.log(pId, amount, agree);
     var data;
     try {
       // Convert the amount from Ether to Wei
       const amountWei = ethers.parseEther(amount);
 
-      data = await contract.donateToCampaign(pId, true, {
+      data = await contract.donateToCampaign(pId, agree, {
         value: amountWei,
       });
     } catch (error) {
