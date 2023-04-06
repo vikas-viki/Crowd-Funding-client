@@ -8,6 +8,7 @@ const Home = () => {
 
   const { address, contract, getCampaigns, campaigns, setCampaigns } = useStateContext();
 
+
   const fetchCampaigns = async () => {
     setIsLoading(true);
     const data = await getCampaigns();

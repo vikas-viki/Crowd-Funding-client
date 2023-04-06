@@ -399,7 +399,7 @@ export const StateContextProvider = ({ children }) => {
           form.title, // title
           form.description, // description
           form.target,
-          new Date(form.deadline).getTime(), // deadline,
+          new Date(form.deadline).getTime() / 1000, // deadline,
           form.image
         );
       } catch (error) {
