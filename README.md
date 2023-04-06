@@ -1,37 +1,37 @@
-## Getting Started
+# Crowd Funding
 
-Create a project using this example:
 
-```bash
-npx thirdweb create --template vite-javascript-starter
-```
+I just have created a complete Crowd Funding **dapp**.
 
-You can start editing the page by modifying `src/main.jsx`. The page auto-updates as you edit the file.
+🤔 where it implements the same functionalities of normal - Crowd funding (where everyone donate their money for a person/group of people who is/are in need of it for a particular purpose.)
 
-On `src/index.jsx`, you'll find our `ThirdwebProvider` wrapping your app,
-this is necessary for our [hooks](https://portal.thirdweb.com/react) and
-[UI Components](https://portal.thirdweb.com/ui-components) to work.
+But here it solves the problem of having a Centralized authority, by using Solidity for writing Smart contract, which is decentralized where no one change it even a person who deployed it into blockchain 😀.
 
-### Deploy to IPFS
+I have also created a detailed video explaining, how you can implement it in Solidity in a beginner level manner on YouTube in Hindi.
 
-Deploy a copy of your application to IPFS using the following command:
 
-```bash
-yarn deploy
-```
 
-## Learn More
+Thankyou for being with me till here 👍. If it seems helpful make sure to share with one who is in need of it 🤗.
 
-To learn more about thirdweb, Vite and React, take a look at the following resources:
+**Packages used :**
 
-- [thirdweb React Documentation](https://docs.thirdweb.com/react) - learn about our React SDK.
-- [thirdweb JavaScript Documentation](https://docs.thirdweb.com/react) - learn about our JavaScript/TypeScript SDK.
-- [thirdweb Portal](https://docs.thirdweb.com/react) - check our guides and development resources.
-- [Vite Documentation](https://vitejs.dev/guide/) - learn about Vite features.
-- [React documentation](https://reactjs.org/) - learn React.
+- `Ethers` for interacting with blockchain.
 
-You can check out [the thirdweb GitHub organization](https://github.com/thirdweb-dev) - your feedback and contributions are welcome!
+- `React JS` for building frontend application.
 
-## Join our Discord!
+- `Tailwind css` for styling.
 
-For any questions, suggestions, join our discord at [https://discord.gg/thirdweb](https://discord.gg/thirdweb).
+**Steps to use :**
+
+- Run `npm install` to install dependencies.
+
+- Run `npm run dev` to run it locally.
+
+All the functionalities are tested, you can see it [here.](https://github.com/vikas-viki/Crowd-Funding-solidity)
+
+**See live :**
+
+link to [site.](https://crowd-funding-fyr8.onrender.com/)
+
+
+
