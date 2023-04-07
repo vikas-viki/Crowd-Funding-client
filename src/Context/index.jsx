@@ -363,7 +363,7 @@ const ABI = [
   },
 ];
 
-const Caddress = "0xDa106788f889dA588203a54B0B6356A291512255";
+const Caddress = "0x2137EE47BB3E992f234F6400e89ce34F73aF07E3";
 
 export const StateContextProvider = ({ children }) => {
   const [address, setAddress] = useState("");
@@ -441,30 +441,37 @@ export const StateContextProvider = ({ children }) => {
   };
 
   const getCampaigns = async () => {
-    const campaigns = await contract.getCampaigns();
+    const campaigns = [...await contract.getCampaigns()];
+    if (campaigns[0] !== 0) {
+      const parsedCampaings = campaigns.map((campaign, i) => {
+        const target = campaign.target
+          ? ethers.formatEther(campaign.target)
+          : null;
+        const amountCollected = campaign.AmountCollected
+          ? ethers.formatEther(campaign.AmountCollected)
+          : null;
 
-    const parsedCampaings = campaigns.map((campaign, i) => {
-      const target = campaign.target
-        ? ethers.formatEther(campaign.target)
-        : null;
-      const amountCollected = campaign.AmountCollected
-        ? ethers.formatEther(campaign.AmountCollected)
-        : null;
-
-      return {
-        owner: campaign.owner,
-        title: campaign.title,
-        description: campaign.description,
-        target: target,
-        deadline: Number(campaign.deadline),
-        amountCollected: amountCollected,
-        image: campaign.image,
-        pId: i,
-        donators: [...campaign.donators],
-        donations: [...campaign.donations.map(e => Number(ethers.formatEther(String(e))))],
-      };
-    });
-    return parsedCampaings;
+        return {
+          owner: campaign.owner,
+          title: campaign.title,
+          description: campaign.description,
+          target: target,
+          deadline: Number(campaign.deadline),
+          amountCollected: amountCollected,
+          image: campaign.image,
+          pId: i,
+          donators: [...campaign.donators],
+          donations: [
+            ...campaign.donations.map((e) =>
+              Number(ethers.formatEther(String(e)))
+            ),
+          ],
+        };
+      });
+      return parsedCampaings;
+    } else {
+      return [];
+    }
   };
 
   const getUserCampaigns = async () => {
@@ -528,13 +535,17 @@ export const StateContextProvider = ({ children }) => {
     }
   };
 
-  const getUserDonatedCampaigns = async () =>{
+  const getUserDonatedCampaigns = async () => {
     const data = await getCampaigns();
-    
-    return data.filter(e => {
-      return e.donators.includes(address);
-    });
-  }
+
+    if (data.length == 0) {
+      return data.filter((e) => {
+        return e.donators.includes(address);
+      });
+    } else {
+      return [];
+    }
+  };
 
   return (
     <StateContext.Provider
