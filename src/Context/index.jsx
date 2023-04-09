@@ -495,7 +495,7 @@ export const StateContextProvider = ({ children }) => {
         value: amountWei,
       });
     } catch (error) {
-      alert(error.message.split('"')[1]);
+      alert(error.message.split('"')[1] === 'estimateGas' ? 'Insufficient funds.': error.message.split('"')[1]);
       return;
     }
 

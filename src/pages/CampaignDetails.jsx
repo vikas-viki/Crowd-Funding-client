@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
-import { ethers } from "ethers";
 
 import { useStateContext } from "../Context";
 import { CountBox, CustomButton, Loader } from "../components";
@@ -16,7 +15,7 @@ const CampaignDetails = () => {
   const [amount, setAmount] = useState("");
   const [donators, setDonators] = useState([]);
   const [isChecked, setIsChecked] = useState(false);
-  const remainingDays = daysLeft(state.deadline);
+  const remainingDays = daysLeft(state.deadline * 1000);
   const handleCheckBoxChange = () => {
     setIsChecked(!isChecked);
   };
@@ -68,7 +67,7 @@ const CampaignDetails = () => {
           <CountBox title="Days Left" value={remainingDays} />
           <CountBox
             title={`Raised of ${state.target}`}
-            value={state.amountCollected}
+            value={state.amountCollected ? state.amountCollected : 0}
           />
           <CountBox title="Total Backers" value={donators.length} />
         </div>
