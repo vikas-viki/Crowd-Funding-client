@@ -377,17 +377,27 @@ export const StateContextProvider = ({ children }) => {
       return;
     }
 
-    // Request access to the user's MetaMask account - directly.
-    // const provider = await window.ethereum.request({ method: 'eth_requestAccounts' });
+    try {
+      const provider = new ethers.BrowserProvider(
+        window.ethereum,
+        new ethers.Network("Sepolia", 11155111)
+      );
+      await provider.send("eth_requestAccounts");
 
-    const provider = new ethers.BrowserProvider(window.ethereum);
-    await provider.send("eth_requestAccounts");
+      const signer = await provider.getSigner();
+      const network = await signer.provider._detectNetwork();
 
-    const signer = await provider.getSigner();
+      if (Number(network.chainId) === 11155111) {
+        setAddress(signer.address);
 
-    setAddress(signer.address);
-
-    setContract(new ethers.Contract(Caddress, ABI, signer));
+        setContract(new ethers.Contract(Caddress, ABI, signer));
+      } else {
+        alert("Please connect to sepolia netwrork");
+        location.reload();
+      }
+    } catch (error) {
+      alert(error.message);
+    }
   };
 
   const publishCampaign = async (form) => {
@@ -441,7 +451,7 @@ export const StateContextProvider = ({ children }) => {
   };
 
   const getCampaigns = async () => {
-    const campaigns = [...await contract.getCampaigns()];
+    const campaigns = [...(await contract.getCampaigns())];
     if (campaigns[0] !== 0) {
       const parsedCampaings = campaigns.map((campaign, i) => {
         const target = campaign.target
@@ -495,7 +505,11 @@ export const StateContextProvider = ({ children }) => {
         value: amountWei,
       });
     } catch (error) {
-      alert(error.message.split('"')[1] === 'estimateGas' ? 'Insufficient funds.': error.message.split('"')[1]);
+      alert(
+        error.message.split('"')[1] === "estimateGas"
+          ? "Insufficient funds."
+          : error.message.split('"')[1]
+      );
       return;
     }
 
