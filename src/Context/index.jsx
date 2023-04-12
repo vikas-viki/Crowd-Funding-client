@@ -445,13 +445,14 @@ export const StateContextProvider = ({ children }) => {
     });
     const lowercaseTitle = _title.toLowerCase();
     const arr = parsedCampaigns.filter((e) => {
-      return e.title.toLowerCase().includes(lowercaseTitle);
+      return e.title.toLowerCase().includes(lowercaseTitle) && e.owner !== "0x0000000000000000000000000000000000000000";
     });
     setCampaigns(arr);
   };
 
   const getCampaigns = async () => {
     const campaigns = [...(await contract.getCampaigns())];
+    
     if (campaigns[0] !== 0) {
       const parsedCampaings = campaigns.map((campaign, i) => {
         const target = campaign.target
@@ -478,7 +479,7 @@ export const StateContextProvider = ({ children }) => {
           ],
         };
       });
-      return parsedCampaings;
+      return parsedCampaings.filter(e => e.owner !== "0x0000000000000000000000000000000000000000");
     } else {
       return [];
     }
